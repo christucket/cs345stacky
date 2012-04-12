@@ -1,7 +1,7 @@
 func:foo:3 {
     if (0 1 >) {
         push(:boo);
-        return(1, func::0{return(0);}, +, 2);
+        return(1, func::0{return(0);}, 1, 2, +, 2);
     } else {
         push(:foo);
         return(3, 4);

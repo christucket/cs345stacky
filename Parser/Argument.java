@@ -1,29 +1,23 @@
 public class Argument {
-    protected int type;
-    
-    // 1 - aInteger
-    // 2 - Function / function
-    // 3 - aStackLocation
-    // 4 - aOperator
-    // 5 - aCondition
-    // 6 - FunctionCall / function call
-    
-    public Argument(int t) {
-        type = t;
+    public Argument() {
     }
     
     public Argument(Object o) {
         
     }
+    
+    public Object run() {return null;}
+    
 }
 
 class aInteger extends Argument {
     int number;
     
     public aInteger(int n) {
-        super(1);
         number = n;
     }
+    
+    public int run() { return n; };
     
     public String toString() {
         return "INTEGER: " + number;
@@ -35,7 +29,6 @@ class aStackLocation extends Argument {
     int number;
     
     public aStackLocation(int n) {
-        super(3);
         number = n;
     }
     
@@ -44,29 +37,15 @@ class aStackLocation extends Argument {
     }
 }
 
-class aOperator extends Argument {
-    String operator;
+class FunctionCall extends Argument {
+    private String name;
     
-    public aOperator(String op) {
-        super(4);
-        operator = op;
+    public FunctionCall(String n) {
+        name = n;
     }
     
     public String toString() {
-        return "OPERATOR: " + operator;
-    }
-}
-
-class aCondition extends Argument {
-    String condition;
-    
-    public aCondition(String c) {
-        super(5);
-        condition = c;
-    }
-    
-    public String toString() {
-        return "CONDITION: " + condition;
+        return "FUNCTIONCALL: " + name;
     }
 }
 

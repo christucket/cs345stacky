@@ -253,7 +253,7 @@ Expression expression() :
     { return new Expression(args); }
 }
 
-Argument condop() :
+FunctionCall condop() :
 {
     Token condop;
 }
@@ -267,10 +267,10 @@ Argument condop() :
   | condop = <GT_OP>
     )
     
-    { return new aCondition(condop.toString()); }
+    { return new FunctionCall(condop.toString()); }
 }
 
-Argument exprop() :
+FunctionCall exprop() :
 {
     Token exprop;
 }
@@ -281,7 +281,7 @@ Argument exprop() :
   | exprop = <MULT>
   | exprop = <DIV>
     )
-   { return new aOperator(exprop.toString()); }
+   { return new FunctionCall(exprop.toString()); }
 }
 
 String identifier() :
