@@ -1,0 +1,26 @@
+javac Program.java
+echo 'Program done'
+
+javac Block.java
+echo 'Block done'
+
+javac Argument.java
+echo 'Argument done'
+
+javac Function.java
+echo 'Function done'
+
+javac Statement.java
+echo 'Statement done'
+
+javac sStatements.java
+echo 'sstatements done'
+
+javac Expression.java
+echo 'Expression done'
+
+javacc Parser.jj
+echo 'Parser done'
+
+javac Stacky.java
+echo 'Stacky done'

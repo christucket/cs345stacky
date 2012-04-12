@@ -1,0 +1,16 @@
+func:foo:3 {
+    if (0 1 >) {
+        push(:boo);
+        return(1, func::0{return(0);}, +, 2);
+    } else {
+        push(:foo);
+        return(3, 4);
+    }
+    
+    push(:bar);
+    return(5, 6);
+}
+
+func:bar: {
+    poop(1, 2);
+}

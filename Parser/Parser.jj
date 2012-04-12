@@ -1,0 +1,334 @@
+PARSER_BEGIN(Parser)
+
+import java.io.*;
+import java.util.*;
+
+public class Parser {
+    public static int tabs = 0;
+    public static boolean AST = true;
+    public static boolean ASTe = false;
+    
+    public static Program p = new Program();
+}
+
+PARSER_END(Parser)
+
+SKIP :
+{
+    " "
+  | "\t"
+  | "\n"
+  | "\r"
+  | <"//" (~["\n","\r"])* ("\n"|"\r")> 
+}
+
+TOKEN :
+{
+    < IF:       "if" >
+  | < ELSE:     "else" >
+  | < WHILE:    "while" >
+  | < FUNC:     "func" >
+  | < RETURN:   "return" >
+  | < PUSH:     "push" >
+  
+  | < TRUE:     "true" >
+  | < FALSE:    "false" >
+
+  | < AND_OP:   "&&" >
+  | < OR_OP:    "||" >
+  | < LPAREN:   "(" >
+  | < RPAREN:   ")" >
+  | < LBRACKET: "[" >
+  | < RBRACKET: "]" >
+  | < LBRACE:   "{" >
+  | < RBRACE:   "}" >
+  | < SEMI:     ";" >
+  | < COLON:    ":" >
+  | < EQ_OP:    "==" >
+  | < NE_OP:    "!=" >
+  | < LE_OP:    "<=" >
+  | < GE_OP:    ">=" >
+  | < LT_OP:    "<" >
+  | < GT_OP:    ">" >
+  | < MINUS:    "-" >
+  | < PLUS:     "+" >
+  | < MULT:     "*" >
+  | < DIV:      "/" >
+  | < BANG:     "!" >
+  | < COMMA:    "," >
+  | < SIGN:     "#">
+  | < DOLLAR:   "$">
+  | < EMPTY:    "\\">
+}
+
+TOKEN :
+{
+    < INTEGER:    (["0"-"9"])+ >
+  | < IDENTIFIER: [ "A"-"Z", "a"-"z", "_"] ( [ "A"-"Z", "a"-"z", "0"-"9", "_" ] )* >
+  // Strings with NO Escaping:
+  | < CLSTRING:   ("\"" (~["\""])* "\"") >
+}
+TOKEN :
+{
+    <ERROR: ~[] >
+}
+
+Program Program() :
+{
+    // Program p = new Program();
+    Function f;
+}
+{
+    ( f = function() { p.add(f); })*
+    
+    { return p; } 
+}
+
+Function function() : 
+{
+    String name = "";
+    int params = 0;
+    Block block;
+}
+{
+    // func:name:params{}
+    // func::3{}
+    // func:name:{}
+    // func::{}
+    
+	<FUNC> <COLON> [name = identifier()] <COLON> [params = integer()] <LBRACE> 
+	{ AST("function: " + name + " " + params + " parameters."); }
+	block = statements() 
+	<RBRACE>
+	
+	{ return new Function(name, params, block); }
+}
+
+Block statements() :
+{
+    Block block = new Block();
+    Statement s;
+}
+{
+    { tabs += 2; }
+    
+    ( s = statement() { if (s != null) block.add(s); })*
+    
+    { tabs -= 2; }
+    { return block; }
+}
+
+Statement statement() :
+{
+    Statement s = null;
+}
+{  
+    (
+    <SEMI>
+  | s = ifStatement()
+  | s = whileStatement()
+  | LOOKAHEAD(2) s = callStatement()   
+  | s = returnStatement()
+  | s = pushStatement()
+    )
+    
+    { return s; }
+}
+
+sIf ifStatement() :
+{
+    Expression e;
+    Block tb = new Block();
+    Block fb = new Block();
+}
+{
+    { ASTe("if"); }
+    <IF> <LPAREN> e = expression() <RPAREN> <LBRACE> 
+    { AST(e.toString()); }
+    tb = statements() 
+    <RBRACE> 
+    [ <ELSE> 
+    { AST("else"); }
+    <LBRACE> 
+    fb = statements()
+    <RBRACE> ]
+    
+    { return new sIf(e, tb, fb); }
+}
+
+sWhile whileStatement() :
+{
+    Expression e;
+    Block tb = new Block();
+}
+{
+    { AST("while"); }
+    <WHILE> <LPAREN> e = expression() <RPAREN> <LBRACE> 
+    tb = statements()
+    <RBRACE>
+    
+    { return new sWhile(e, tb); }
+}
+
+sCall callStatement() :
+{
+    String name;
+    ArrayList<Argument> args;
+}
+{
+    
+    name = identifier() { AST("call " + name); } <LPAREN> args = arguments() <RPAREN> <SEMI>
+    { return new sCall(args); }
+}
+
+sReturn returnStatement() :
+{
+    ArrayList<Argument> args;
+}
+{
+    { AST("return"); }
+    <RETURN> <LPAREN> args = arguments() <RPAREN> <SEMI>
+    { return new sReturn(args); }
+}
+
+sPush pushStatement() :
+{
+    String name;
+    ArrayList<Argument> args;
+}
+{
+    { AST("push"); }
+    <PUSH>  <LPAREN> args = arguments() <RPAREN> <SEMI>
+    { return new sPush(args); }
+}
+
+ArrayList<Argument> arguments() :
+{
+    ArrayList<Argument> args = new ArrayList<Argument>();
+    Argument arg;
+}
+{
+    { tabs += 2; }
+    
+    ( arg = argument() { AST("Argument: " + arg); args.add(arg); })* ( <COMMA> arg = argument() { AST("Argument: " + arg); args.add(arg); })* 
+    
+    { tabs -= 2; }
+    { return args; }
+}
+
+Argument argument() :
+{
+    Object arg;
+}
+{
+    (
+    arg = integer()             { return new aInteger((Integer)arg); }
+  | arg = function()            { p.add((Function)arg); return (Argument)(new FunctionCall(((Function)arg).getName())); }
+  | arg = functioncall()        { return (Argument)arg; }
+  | arg = exprop()              { return (Argument)arg; }
+  | arg = condop()              { return (Argument)arg; }
+    )
+    
+    { return new Argument(arg); }
+}
+
+Argument functioncall() : 
+{
+    String name;
+}
+{
+    <COLON> name = identifier()
+    
+    { return new FunctionCall(name); }
+}
+
+
+Expression expression() :
+{
+    ArrayList<Argument> args = new ArrayList<Argument>();
+    Argument arg;
+}
+{
+    (arg = argument() { args.add(arg); }) (arg = exprop() | arg = argument() { args.add(arg); })*
+    { return new Expression(args); }
+}
+
+Argument condop() :
+{
+    Token condop;
+}
+{
+    (
+    condop = <GE_OP>
+  | condop = <LE_OP>
+  | condop = <NE_OP>
+  | condop = <EQ_OP>
+  | condop = <LT_OP>
+  | condop = <GT_OP>
+    )
+    
+    { return new aCondition(condop.toString()); }
+}
+
+Argument exprop() :
+{
+    Token exprop;
+}
+{
+    (
+    exprop = <PLUS>
+  | exprop = <MINUS>
+  | exprop = <MULT>
+  | exprop = <DIV>
+    )
+   { return new aOperator(exprop.toString()); }
+}
+
+String identifier() :
+{
+    Token i;
+}
+{
+    i = <IDENTIFIER>
+    
+    { return i.toString(); }
+}
+
+Integer integer() :
+{
+    Token i;
+}
+{
+    i = <INTEGER>
+    
+    { return Integer.valueOf(i.toString()); }
+}
+
+
+String indent() :
+{
+    String spaces = "";
+}
+{
+    {
+        if (ASTe) { ASTe = false; return ""; }
+        for (int i = 0; i < tabs; i++) spaces += " ";
+        return spaces;
+    }
+}
+
+void AST(String s) :
+{
+
+}
+{
+    { if (AST) System.out.println(indent() + s); }
+}
+
+void ASTe(String s) :
+{
+
+}
+{
+    { if (AST) { System.out.print(indent() + s + " "); ASTe = true; } }
+}
