@@ -1,6 +1,9 @@
 javac Program.java
 echo 'Program done'
 
+javac sStack.java
+echo 'sStack done'
+
 javac Block.java
 echo 'Block done'
 
@@ -14,7 +17,7 @@ javac Statement.java
 echo 'Statement done'
 
 javac sStatements.java
-echo 'sstatements done'
+echo 'sStatements done'
 
 javac Expression.java
 echo 'Expression done'

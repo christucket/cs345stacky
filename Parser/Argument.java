@@ -17,7 +17,11 @@ class aInteger extends Argument {
         number = n;
     }
     
-    public int run() { return n; };
+    public Integer run() { return number; };
+    
+    public Integer toInteger() {
+        return number;
+    }
     
     public String toString() {
         return "INTEGER: " + number;

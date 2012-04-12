@@ -6,8 +6,8 @@ public class Function {
     private int params;
     private Block block;
     
-    ArrayList<Argument> stack;
-    ArrayList<Argument> returnList;
+    sStack stack;
+    sStack returnList;
     
     
     public Function(String n, int p, Block b) {
@@ -17,13 +17,8 @@ public class Function {
         params = p;
         block = b;
         
-        stack = new ArrayList<Argument>();
-        returnList = new ArrayList<Argument>();
-    }
-    
-    public Argument getLast(int i) {
-        // get last arguments in the stack, 0 is the last.
-        return stack.get(stack.size() - i);
+        stack = new sStack();
+        returnList = new sStack();
     }
     
     public String getName() {
@@ -34,7 +29,7 @@ public class Function {
         return params;
     }
     
-    public ArrayList<Argument> run() {
+    public sStack run() {
         return returnList;
     }
     
@@ -51,21 +46,27 @@ class aOperator extends Function {
         operator = op;
     }
     
-    public ArrayList<Argument> run() {
+    public sStack run() {
         int result = 0;
-        int first = ((aInteger)getLast(0)).run();
-        int second = ((aInteger)getLast(1)).run();
+        int first = ((aInteger)stack.getLast(0)).run();
+        int second = ((aInteger)stack.getLast(1)).run();
         
         if (operator.equals("+")) {
             result = first + second;
         }
         
-        returnList.append(new aInteger(result));
+        returnList.push(new aInteger(result));
         return returnList;
     }
     
     public boolean canRun() {
-        return ( getLast(0) instanceof aInteger && getLast(1) instanceof aInteger );
+        boolean ret = false;
+        
+        if (stack.size() > 1) {
+            ret = ( stack.getLast(0) instanceof aInteger && stack.getLast(1) instanceof aInteger );
+        }
+        
+        return ret;
     }
     
     public String toString() {
@@ -81,8 +82,33 @@ class aCondition extends Function {
         condition = c;
     }
     
-    public ArrayList<Argument> run() {
+    public sStack run() {
+        boolean result = false;
+        
+        int first = ((aInteger)stack.getLast(0)).run();
+        int second = ((aInteger)stack.getLast(1)).run();
+        
+        if (condition.equals("==")) {
+            result = first == second;
+        }
+        
+        if (result) {
+            returnList.push(new aInteger(1));
+        } else {
+            returnList.push(new aInteger(0));
+        }
+        
         return returnList;
+    }
+    
+    public boolean canRun() {
+        boolean ret = false;
+        
+        if (stack.size() > 1) {
+            ret = ( stack.getLast(0) instanceof aInteger && stack.getLast(1) instanceof aInteger );
+        }
+        
+        return ret;
     }
     
     
