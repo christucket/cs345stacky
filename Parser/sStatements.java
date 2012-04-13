@@ -31,7 +31,7 @@ class sPush extends Statement {
         for (Argument a : arguments.stack) {
             if (a instanceof aInteger) {
                 parent.stack.push(a);
-            } else {
+            } else if (a instanceof FunctionCall) {
                 // call the function ? 
             }
             System.out.println(a.getClass().getName() + "  " + a.toString());
