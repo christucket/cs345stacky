@@ -13,10 +13,11 @@ public class Block {
         
         parentFunction.parentProgram.indent(4);
         
+        parentFunction.parentProgram.debug("STACK: " + parentFunction.stack.toString());
         for (Statement s : statements) {
-            parentFunction.parentProgram.debug("STACK: " + parentFunction.stack.toString());
             parentFunction.parentProgram.debug(s.toString());
-            s.run();
+            s.run(parentFunction);
+            parentFunction.parentProgram.debug("STACK: " + parentFunction.stack.toString());
         }
         
         parentFunction.parentProgram.indent(-4);

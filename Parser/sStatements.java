@@ -11,7 +11,7 @@ class sReturn extends Statement {
         return "RETURN ";
     }
     
-    public void run() {
+    public void run(Function parent) {
         System.out.println(" - return ");
     }
 }
@@ -27,8 +27,15 @@ class sPush extends Statement {
         return "PUSH " + arguments;
     }
     
-    public void run() {
-        System.out.println(" - push ");
+    public void run(Function parent) {
+        for (Argument a : arguments.stack) {
+            if (a instanceof aInteger) {
+                parent.stack.push(a);
+            } else {
+                // call the function ? 
+            }
+            System.out.println(a.getClass().getName() + "  " + a.toString());
+        }
     }
 }
 
@@ -45,7 +52,7 @@ class sWhile extends Statement {
         return "WHILE " ;
     }
     
-    public void run() {
+    public void run(Function parent) {
         System.out.println(" - while ");
     }
 }
@@ -65,7 +72,7 @@ class sIf extends Statement {
         return "IF ";
     }
     
-    public void run() {
+    public void run(Function parent) {
         System.out.println(" - if ");
     }
 }

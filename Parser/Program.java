@@ -7,6 +7,7 @@ public class Program {
     
     public Program() {
         functions = new ArrayList<Function>();
+        functions.add(new aOperator("+"));
     }
     
     public void add(Function f) {

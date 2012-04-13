@@ -1,7 +1,8 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class sStack {
-    private ArrayList<Argument> stack;
+    public ArrayList<Argument> stack;
 
     public sStack() {
         stack = new ArrayList<Argument>();
