@@ -127,7 +127,6 @@ Statement statement() :
     <SEMI>
   | s = ifStatement()
   | s = whileStatement()
-  | LOOKAHEAD(2) s = callStatement()   
   | s = returnStatement()
   | s = pushStatement()
     )
@@ -170,20 +169,9 @@ sWhile whileStatement() :
     { return new sWhile(e, tb); }
 }
 
-sCall callStatement() :
-{
-    String name;
-    ArrayList<Argument> args;
-}
-{
-    
-    name = identifier() { AST("call " + name); } <LPAREN> args = arguments() <RPAREN> <SEMI>
-    { return new sCall(args); }
-}
-
 sReturn returnStatement() :
 {
-    ArrayList<Argument> args;
+    sStack args;
 }
 {
     { AST("return"); }
@@ -194,7 +182,7 @@ sReturn returnStatement() :
 sPush pushStatement() :
 {
     String name;
-    ArrayList<Argument> args;
+    sStack args;
 }
 {
     { AST("push"); }
@@ -202,15 +190,15 @@ sPush pushStatement() :
     { return new sPush(args); }
 }
 
-ArrayList<Argument> arguments() :
+sStack arguments() :
 {
-    ArrayList<Argument> args = new ArrayList<Argument>();
+    sStack args = new sStack();
     Argument arg;
 }
 {
     { tabs += 2; }
     
-    ( arg = argument() { AST("Argument: " + arg); args.add(arg); })* ( <COMMA> arg = argument() { AST("Argument: " + arg); args.add(arg); })* 
+    ( arg = argument() { AST("Argument: " + arg); args.push(arg); })* ( <COMMA> arg = argument() { AST("Argument: " + arg); args.push(arg); })* 
     
     { tabs -= 2; }
     { return args; }

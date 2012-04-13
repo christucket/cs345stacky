@@ -1,4 +1,5 @@
 public class Argument {
+
     public Argument() {
     }
     
@@ -6,8 +7,7 @@ public class Argument {
         
     }
     
-    public Object run() {return null;}
-    
+    public Object run() {return null;}    
 }
 
 class aInteger extends Argument {

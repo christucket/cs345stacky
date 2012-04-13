@@ -1,26 +1,34 @@
 import java.util.ArrayList;
 
-class sCall extends Statement {
-    ArrayList<Argument> arguments;
+class sReturn extends Statement {
+    sStack arguments;
     
-    public sCall(ArrayList<Argument> args) {
+    public sReturn(sStack args) {
         arguments = args;
     }
-}
-
-class sReturn extends Statement {
-    ArrayList<Argument> arguments;
     
-    public sReturn(ArrayList<Argument> args) {
-        arguments = args;
+    public String toString() {
+        return "RETURN ";
+    }
+    
+    public void run() {
+        System.out.println(" - return ");
     }
 }
 
 class sPush extends Statement {
-    ArrayList<Argument> arguments;
+    sStack arguments;
     
-    public sPush(ArrayList<Argument> args) {
+    public sPush(sStack args) {
         arguments = args;
+    }
+    
+    public String toString() {
+        return "PUSH " + arguments;
+    }
+    
+    public void run() {
+        System.out.println(" - push ");
     }
 }
 
@@ -31,6 +39,14 @@ class sWhile extends Statement {
     public sWhile(Expression e, Block tb) {
         expr = e;
         trueBlock = tb;
+    }
+    
+    public String toString() {
+        return "WHILE " ;
+    }
+    
+    public void run() {
+        System.out.println(" - while ");
     }
 }
 
@@ -43,6 +59,14 @@ class sIf extends Statement {
         expr = e;
         trueBlock = tb;
         falseBlock = fb;
+    }
+    
+    public String toString() {
+        return "IF ";
+    }
+    
+    public void run() {
+        System.out.println(" - if ");
     }
 }
 

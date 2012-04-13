@@ -13,12 +13,11 @@ public class Stacky {
 
         Parser parser = new Parser(inStream);
         Program program = parser.Program();
+        
+        
+        System.out.println("\n\n\n\nRunning program.");
+        
         program.run();
-        
-        
-        System.out.println("\n\n\n\n");
-        
-        //program.run();
         
         
         /*

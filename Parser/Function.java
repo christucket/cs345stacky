@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Function {
-    private Program parentProgram;
+    public Program parentProgram;
     private String name;
     private int params;
     private Block block;
@@ -29,7 +29,14 @@ public class Function {
         return params;
     }
     
-    public sStack run() {
+    public sStack run(Program parent) {
+        parentProgram = parent;
+        
+        parentProgram.indent(4);
+        parentProgram.debug("Running [" + name + "]");
+        returnList = block.run(this);
+        
+        parentProgram.indent(-4);
         return returnList;
     }
     

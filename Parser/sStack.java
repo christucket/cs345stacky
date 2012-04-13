@@ -1,11 +1,10 @@
 import java.util.ArrayList;
 
 public class sStack {
-
     private ArrayList<Argument> stack;
 
     public sStack() {
-    
+        stack = new ArrayList<Argument>();
     }
     
     public int size() {
@@ -13,7 +12,8 @@ public class sStack {
     }
     
     public void push(Argument arg) {
-        stack.add(arg);
+        if (arg != null)
+            stack.add(arg);
     }
     
     
