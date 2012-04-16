@@ -20,25 +20,31 @@ public class sStack {
     
     public Argument getLast(int i) {
         // get last arguments in the stack, 0 is the last.
-        return stack.get(stack.size() - i);
+        return stack.get(stack.size() - i - 1);
     }
     
     public sStack splitLast(int n) {
         sStack newStack = new sStack();
         
-        for (int i = stack.size() - n; i < stack.size(); i++) {
+        for (int i = n - 1; i >= 0; i--) {
             newStack.push(getLast(i));
         }
         
         return newStack;
     }
     
+    public void popLast(int n) {
+        stack.subList(stack.size() - n, stack.size()).clear();
+    }
+    
     public String toString() {
         String ret = "[";
+        
         for (Argument a : stack) {
             ret += a.toString() + ", ";
         }
         
+        if (ret.length() > 2) ret = ret.substring(0, ret.length() - 2);
         return ret + "]";
     }
 }

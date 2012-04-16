@@ -8,6 +8,16 @@ public class Program {
     public Program() {
         functions = new ArrayList<Function>();
         functions.add(new aOperator("+"));
+        functions.add(new aOperator("-"));
+        functions.add(new aOperator("*"));
+        functions.add(new aOperator("/"));
+        
+        functions.add(new aCondition("=="));
+        functions.add(new aCondition("!="));
+        functions.add(new aCondition(">="));
+        functions.add(new aCondition(">"));
+        functions.add(new aCondition("<="));
+        functions.add(new aCondition("<"));
     }
     
     public void add(Function f) {
@@ -18,8 +28,30 @@ public class Program {
         Function f = getFunction("main");
         if (f == null) System.out.println("Couldn't find function main");
         
-        f.run(this);
+        f.run(this, new sStack());
     }
+    
+    public void runFunction(FunctionCall fc, sStack s) {
+        runFunction(fc.getName(), s);
+    }
+    
+    public sStack runFunction(String fc, sStack s) {
+        debug("Call " + fc);
+        Function f = getFunction(fc);
+        sStack callWith = new sStack();
+        sStack ret = null;
+        
+        if (f.getParams() <= s.size()) {
+            callWith = s.splitLast(f.getParams());
+            s.popLast(f.getParams());
+            ret = f.run(this, callWith);
+        } else {
+            System.out.println("Can't run " + f + " yet");
+        }
+        
+        return ret;
+    }
+    
     
     public Function getFunction(String name) {
         for (Function f : functions) {

@@ -1,13 +1,18 @@
 public class Argument {
 
     public Argument() {
+    
     }
     
     public Argument(Object o) {
         
     }
     
-    public Object run() {return null;}    
+    public Object run() {return null;}   
+    
+    public String getName() {
+        return "NONE: ARGUMENTWTF";
+    } 
 }
 
 class aInteger extends Argument {
@@ -48,8 +53,38 @@ class FunctionCall extends Argument {
         name = n;
     }
     
+    public String getName() {
+        return name;
+    }
+    
     public String toString() {
         return "FUNCTIONCALL: " + name;
+    }
+}
+
+class OperatorCall extends Argument {
+    private String name;
+    
+    public OperatorCall(String n) {
+        name = n;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String toString() {
+        return "OPERATORCALL: " + name;
+    }
+    
+    public static boolean canRun(sStack s) {
+        boolean ret = false;
+        
+        if (s.size() > 1) {
+            ret = ( s.getLast(0) instanceof aInteger && s.getLast(1) instanceof aInteger );
+        }
+        
+        return ret;
     }
 }
 

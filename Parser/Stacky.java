@@ -10,7 +10,7 @@ public class Stacky {
         if (args.length > 0 ) {
             inStream = new FileInputStream(args[0]);
         }
-
+        
         Parser parser = new Parser(inStream);
         Program program = parser.Program();
         

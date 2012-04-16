@@ -32,9 +32,14 @@ class sPush extends Statement {
             if (a instanceof aInteger) {
                 parent.stack.push(a);
             } else if (a instanceof FunctionCall) {
-                // call the function ? 
+                parent.call(a.getName(), parent.stack);
+            } else if (a instanceof OperatorCall) {
+                if (OperatorCall.canRun(parent.stack)) {
+                    parent.call(a.getName(), parent.stack);
+                } else {
+                    parent.stack.push(a);
+                }
             }
-            System.out.println(a.getClass().getName() + "  " + a.toString());
         }
     }
 }

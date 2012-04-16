@@ -241,7 +241,7 @@ Expression expression() :
     { return new Expression(args); }
 }
 
-FunctionCall condop() :
+OperatorCall condop() :
 {
     Token condop;
 }
@@ -255,10 +255,10 @@ FunctionCall condop() :
   | condop = <GT_OP>
     )
     
-    { return new FunctionCall(condop.toString()); }
+    { return new OperatorCall(condop.toString()); }
 }
 
-FunctionCall exprop() :
+OperatorCall exprop() :
 {
     Token exprop;
 }
@@ -269,7 +269,7 @@ FunctionCall exprop() :
   | exprop = <MULT>
   | exprop = <DIV>
     )
-   { return new FunctionCall(exprop.toString()); }
+   { return new OperatorCall(exprop.toString()); }
 }
 
 String identifier() :
