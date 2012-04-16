@@ -2,14 +2,11 @@ func:bar:2{
     push(1, 1);
 }
 
-func:foo:2{
-    push(0, 0, :bar);
-    push(2, 2, :bar);
-    
+func:swap:2{
+    return(0, 1, +);
 }
 
 func:main:{
-    push(1, 2);
-    push(3, 4, 5, 6);
-    push(+, 12, >, :foo);
+    push(2, 3, :swap);
+    push(3, 2, :swap);
 }

@@ -15,6 +15,7 @@ public class Block {
         
         parentFunction.parentProgram.debug(parent.getName() + " STACK: " + parentFunction.stack.toString());
         for (Statement s : statements) {
+            if (parent.hasReturned) break;
             parentFunction.parentProgram.debug(s.toString());
             s.run(parentFunction);
             parentFunction.parentProgram.debug(parent.getName() + " STACK: " + parentFunction.stack.toString());

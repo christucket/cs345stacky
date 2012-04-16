@@ -8,6 +8,7 @@ public class Function {
     
     sStack stack;
     sStack returnList;
+    boolean hasReturned;
     
     
     public Function(String n, int p, Block b) {
@@ -22,15 +23,17 @@ public class Function {
         returnList = new sStack();
     }
     
-    public void call(FunctionCall fc, sStack s) {
-        call(fc.getName(), s);
+    public boolean call(FunctionCall fc, sStack s) {
+        return call(fc.getName(), s);
     }
     
-    public void call(String fc, sStack s) {
+    public boolean call(String fc, sStack s) {
         s = parentProgram.runFunction(fc, s);
+        if (s == null) return false;
         //System.out.println("Trying to add " + s);
         new sPush(s).run(this);
         parentProgram.debug(name + " STACK: " + stack);
+        return true;
     }
     
     public String getName() {
@@ -43,13 +46,14 @@ public class Function {
     
     public sStack run(Program parent, sStack start) {
         returnList = new sStack();
+        hasReturned = false;
         
         parentProgram = parent;
         stack = start;
         
         parentProgram.indent(4);
         parentProgram.debug("Running [" + name + "]");
-        returnList = block.run(this);
+        block.run(this);
         
         parentProgram.indent(-4);
         return returnList;

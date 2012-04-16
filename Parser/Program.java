@@ -36,19 +36,21 @@ public class Program {
     }
     
     public sStack runFunction(String fc, sStack s) {
-        debug("Call " + fc);
         Function f = getFunction(fc);
         sStack callWith = new sStack();
         sStack ret = null;
+        
+        debug("Call " + fc);
         
         if (f.getParams() <= s.size()) {
             callWith = s.splitLast(f.getParams());
             s.popLast(f.getParams());
             ret = f.run(this, callWith);
         } else {
-            System.out.println("Can't run " + f + " yet");
+            debug(" -- can't yet, pushing to stack.");
         }
         
+        debug("Returning: " + ret);
         return ret;
     }
     

@@ -8,11 +8,25 @@ class sReturn extends Statement {
     }
     
     public String toString() {
-        return "RETURN ";
+        return "RETURN " + arguments;
     }
     
     public void run(Function parent) {
-        System.out.println(" - return ");
+        // if proper sequence of stack locations
+        sStack ret = new sStack();
+        for (Argument a : arguments.stack) {
+            if (a instanceof aInteger) {
+                ret.push(parent.stack.getLast((Integer)a.run()));
+            } else if (a instanceof FunctionCall) {
+                ret.push(a);
+            } else if (a instanceof OperatorCall) {
+                ret.push(a);
+            } else {
+                System.out.println(" ### return Unknown argument type: " + a.toString());
+            }
+        }
+        
+        parent.returnList = ret;
     }
 }
 
@@ -28,17 +42,23 @@ class sPush extends Statement {
     }
     
     public void run(Function parent) {
+        boolean ran = true;
         for (Argument a : arguments.stack) {
             if (a instanceof aInteger) {
                 parent.stack.push(a);
             } else if (a instanceof FunctionCall) {
-                parent.call(a.getName(), parent.stack);
+                ran = parent.call(a.getName(), parent.stack);
+                if (!ran) {
+                    parent.stack.push(a);
+                }
             } else if (a instanceof OperatorCall) {
                 if (OperatorCall.canRun(parent.stack)) {
                     parent.call(a.getName(), parent.stack);
                 } else {
                     parent.stack.push(a);
                 }
+            } else {
+                System.out.println(" ### push Unknown argument type: " + a.toString());
             }
         }
     }
