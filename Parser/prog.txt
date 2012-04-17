@@ -1,12 +1,29 @@
-func:bar:2{
+// new function labels are
+// func:name:params{body}
+// if a function doesn't have (or need) a name, leave it blank if you want
+// func::params{body}
+// if a function doesn't params (basically 0 extra params), leave it blank if you want
+// func:name:{body}
+// func::{body}
+
+// functions labels can be inside of push statements (and expressions ... i think, i haven't fucking tried and i don't care.
+// it doesn't need to have a name but if it does have a name, you can recall it later in the code.
+
+// expressions will look like ( 0 1 + 1 2 + > ) or something like that, parens don't work so don't bother trying them
+
+// the code below will keep looping until the last param hits 0
+// right now the operator order would be something like   X Y -   ==> Y - X, i'm going to change that or you can change it if you want and push your updates, it's fairly easy to do, it's all in function.java
+
+
+func:bar:2 {
     push(1, 1);
 }
 
-func:swap:2{
-    return(0, 1, +);
-}
-
-func:main:{
-    push(2, 3, :swap);
-    push(3, 2, :swap);
+func:main: {
+    push(4, 8, >);
+    push(0, 1, 2, 3);
+    
+    while (0) {
+        push(func::1{push(1, func::2{return(0, 1);}, -); return(0);});
+    }
 }

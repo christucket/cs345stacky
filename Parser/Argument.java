@@ -29,7 +29,7 @@ class aInteger extends Argument {
     }
     
     public String toString() {
-        return "INTEGER: " + number;
+        return "INT: " + number;
     }
 }
 
@@ -42,7 +42,7 @@ class aStackLocation extends Argument {
     }
     
     public String toString() {
-        return "STACKLOCATION: " + number;
+        return "STACKLOC: " + number;
     }
 }
 
@@ -58,7 +58,7 @@ class FunctionCall extends Argument {
     }
     
     public String toString() {
-        return "FUNCTIONCALL: " + name;
+        return "FUNCCALL: " + name;
     }
 }
 
@@ -74,7 +74,7 @@ class OperatorCall extends Argument {
     }
     
     public String toString() {
-        return "OPERATORCALL: " + name;
+        return "OPCALL: " + name;
     }
     
     public static boolean canRun(sStack s) {

@@ -233,11 +233,11 @@ Argument functioncall() :
 
 Expression expression() :
 {
-    ArrayList<Argument> args = new ArrayList<Argument>();
+    sStack args = new sStack();
     Argument arg;
 }
 {
-    (arg = argument() { args.add(arg); }) (arg = exprop() | arg = argument() { args.add(arg); })*
+    (arg = argument() { args.push(arg); }) (arg = argument() { args.push(arg); })*
     { return new Expression(args); }
 }
 

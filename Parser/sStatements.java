@@ -74,11 +74,13 @@ class sWhile extends Statement {
     }
     
     public String toString() {
-        return "WHILE " ;
+        return "WHILE " + expr;
     }
     
     public void run(Function parent) {
-        System.out.println(" - while ");
+        while (expr.run(parent)) {
+            trueBlock.run(parent);
+        }
     }
 }
 
@@ -94,11 +96,17 @@ class sIf extends Statement {
     }
     
     public String toString() {
-        return "IF ";
+        return "IF " + expr;
     }
     
     public void run(Function parent) {
-        System.out.println(" - if ");
+        if (expr.run(parent)) {
+            parent.parentProgram.debug("Running true statements.");
+            trueBlock.run(parent);
+        } else {
+            parent.parentProgram.debug("Running false statements.");
+            falseBlock.run(parent);
+        }
     }
 }
 
