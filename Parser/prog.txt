@@ -14,6 +14,7 @@
 // the code below will keep looping until the last param hits 0
 // right now the operator order would be something like   X Y -   ==> Y - X, i'm going to change that or you can change it if you want and push your updates, it's fairly easy to do, it's all in function.java
 
+// while (0) means while the last element is >0, if its <=0 it will fail the test condition.
 
 func:bar:2 {
     push(1, 1);
