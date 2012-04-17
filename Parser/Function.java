@@ -81,8 +81,8 @@ class aOperator extends Function {
         returnList = new sStack();
         
         int result = 0;
-        int first = ((aInteger)stack.getLast(0)).run();
-        int second = ((aInteger)stack.getLast(1)).run();
+        int second = ((aInteger)stack.getLast(0)).run();
+        int first = ((aInteger)stack.getLast(1)).run();
         
         if (operator.equals("+")) {
             result = first + second;
@@ -127,8 +127,8 @@ class aCondition extends Function {
         stack = start;
         returnList = new sStack();
         
-        int first = ((aInteger)stack.getLast(0)).run();
-        int second = ((aInteger)stack.getLast(1)).run();
+        int second = ((aInteger)stack.getLast(0)).run();
+        int first = ((aInteger)stack.getLast(1)).run();
         
         if (condition.equals("==")) {
             result = first == second;
