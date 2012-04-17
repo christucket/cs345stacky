@@ -22,8 +22,9 @@ echo 'sStatements done'
 javac Expression.java
 echo 'Expression done'
 
+javac Stacky.java
+echo 'Stacky done'
+
 javacc Parser.jj
 echo 'Parser done'
 
-javac Stacky.java
-echo 'Stacky done'
