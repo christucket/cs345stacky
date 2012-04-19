@@ -19,21 +19,14 @@ func:bar:2 {
     push(1, 1);
 }
 
+func:loldoesnothingfornowiguess:{
+    push(1);
+    return(0);
+}
+
 func:main: {
-    push(4, 8, >);
-    push(0, 1, -, 6, *, 4, 3);
-    // push (0, 6, -, 4, 3);         would also work
-    // that should push -6, 4, 3,    i'm not sure if i want to include negative numbers, hvm didn't exactly have them either.
+    push(12);
+    push(>[5], 5, <[]);
     
-    while (0) {
-        push(1, -);
-    }
     
-    while (0 1 +) {
-        push(1, -);
-    }
-    
-    while (0 1 + 2 >) {
-        push(1, -);
-    }
 }

@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Block {
-    public Function parentFunction;
     private ArrayList<Statement> statements;
     
     public Block() {
@@ -9,19 +8,17 @@ public class Block {
     }
     
     public sStack run(Function parent) {
-        parentFunction = parent;
+        parent.parentProgram.indent(4);
         
-        parentFunction.parentProgram.indent(4);
-        
-        parentFunction.parentProgram.debug(parent.getName() + " STACK: " + parentFunction.stack.toString());
+        parent.parentProgram.debug(parent.getName() + "[" + parent.hashCode() % 1000 + "] STACK[" + parent.stack.hashCode() % 1000 + "]: " + parent.stack.toString());
         for (Statement s : statements) {
             if (parent.hasReturned) break;
-            parentFunction.parentProgram.debug(s.toString());
-            s.run(parentFunction);
-            parentFunction.parentProgram.debug(parent.getName() + " STACK: " + parentFunction.stack.toString());
+            parent.parentProgram.debug(s.toString());
+            s.run(parent);
+            parent.parentProgram.debug(parent.getName() + "[" + parent.hashCode() % 1000 + "] STACK[" + parent.stack.hashCode() % 1000 + "]: " + parent.stack.toString());
         }
         
-        parentFunction.parentProgram.indent(-4);
+        parent.parentProgram.indent(-4);
         
         return new sStack();
     }

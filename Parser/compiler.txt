@@ -1,30 +1,4 @@
-javac Program.java
-echo 'Program done'
-
-javac sStack.java
-echo 'sStack done'
-
-javac Block.java
-echo 'Block done'
-
-javac Argument.java
-echo 'Argument done'
-
-javac Function.java
-echo 'Function done'
-
-javac Statement.java
-echo 'Statement done'
-
-javac sStatements.java
-echo 'sStatements done'
-
-javac Expression.java
-echo 'Expression done'
-
-javac Stacky.java
-echo 'Stacky done'
-
+javac Program.java sStack.java Block.java Argument.java Function.java Statement.java Expression.java Stacky.java
 javacc Parser.jj
-echo 'Parser done'
+echo 'COMPILED!'
 

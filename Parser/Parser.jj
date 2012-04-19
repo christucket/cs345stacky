@@ -210,14 +210,27 @@ Argument argument() :
 }
 {
     (
-    arg = integer()             { return new aInteger((Integer)arg); }
-  | arg = function()            { p.add((Function)arg); return (Argument)(new FunctionCall(((Function)arg).getName())); }
-  | arg = functioncall()        { return (Argument)arg; }
-  | arg = exprop()              { return (Argument)arg; }
-  | arg = condop()              { return (Argument)arg; }
+    arg = integer()                   { return new aInteger((Integer)arg); }
+  | arg = function()                  { p.add((Function)arg); return (Argument)(new FunctionCall(((Function)arg).getName())); }
+  | arg = functioncall()              { return (Argument)arg; }
+  | LOOKAHEAD(2) arg = memorycall()   { return (Argument)arg; }
+  | arg = exprop()                    { return (Argument)arg; }
+  | LOOKAHEAD(2) arg = condop()       { return (Argument)arg; }
     )
     
     { return new Argument(arg); }
+}
+
+Argument memorycall() :
+{
+    Token t;
+    int index = -1;
+}
+{
+    (t = <GT_OP> | t = <LT_OP>) <LBRACKET> [index = integer()] <RBRACKET>
+    
+    
+    { return new MemoryCall(t.toString(), index); }
 }
 
 Argument functioncall() : 

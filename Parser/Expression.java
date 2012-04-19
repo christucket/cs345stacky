@@ -21,8 +21,10 @@ public class Expression {
                 ret = f.run(parent.parentProgram, s);
                 s.popLast(2);
                 s.push(ret.getLast(0));
-            } else {
+            } else if (a instanceof aInteger) {
                 s.push(parent.stack.getLast((Integer)a.run()));
+            } else if (a instanceof FunctionCall) {
+                // ignore for now i guess, not sure if we want this.
             }
         }
         

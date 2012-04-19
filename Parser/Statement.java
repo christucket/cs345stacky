@@ -38,6 +38,7 @@ class sReturn extends Statement {
             }
         }
         
+        parent.hasReturned = true;
         parent.returnList = ret;
     }
 }
@@ -68,6 +69,41 @@ class sPush extends Statement {
                     parent.call(a.getName(), parent.stack);
                 } else {
                     parent.stack.push(a);
+                }
+            } else if (a instanceof MemoryCall) {
+                if (((MemoryCall)a).getType().equals("to")) {
+                    if (((MemoryCall)a).getIndex() == -1)
+                    {
+                        if (parent.stack.size() >= 2 && parent.stack.getLast(0) instanceof aInteger) {
+                            parent.parentProgram.setMemory((Integer)(parent.stack.getLast(0).run()), parent.stack.getLast(1));
+                            parent.stack.popLast(2);
+                        } else {
+                            parent.stack.push(a);
+                        }
+                    } else {
+                        if (parent.stack.size() >= 1) {
+                            parent.parentProgram.setMemory(((MemoryCall)a).getIndex(), parent.stack.getLast(0));
+                            parent.stack.popLast(1);
+                        } else {
+                            parent.stack.push(a);
+                        }
+                    }
+                } else {
+                    if (((MemoryCall)a).getIndex() == -1)
+                    {
+                        if (parent.stack.size() >= 1 && parent.stack.getLast(0) instanceof aInteger) {
+                            Argument arg = parent.parentProgram.getMemory((Integer)(parent.stack.getLast(0).run()));
+                            parent.stack.popLast(1);
+                            sStack s = new sStack(); s.push(arg);
+                            new sPush(s).run(parent);
+                        } else {
+                            parent.stack.push(a);
+                        }
+                    } else {
+                        Argument arg = parent.parentProgram.getMemory(((MemoryCall)a).getIndex());
+                        sStack s = new sStack(); s.push(arg);
+                        new sPush(s).run(parent);
+                    }
                 }
             } else {
                 System.out.println(" ### push Unknown argument type: " + a.toString());

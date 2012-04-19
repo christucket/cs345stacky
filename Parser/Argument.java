@@ -33,7 +33,27 @@ class aInteger extends Argument {
     }
 }
 
-
+class MemoryCall extends Argument {
+    String type;
+    int index;
+    
+    public MemoryCall(String t, int i) {
+        if (t.equals("<")) type = "from"; else type = "to";
+        index = i;
+    }
+    
+    public String getType() {
+        return type;
+    }
+    
+    public int getIndex() {
+        return index;
+    }
+    
+    public String toString() {
+        return "MEMORYCALL: " + type + " " + index;
+    }
+}
 class aStackLocation extends Argument {
     int number;
     

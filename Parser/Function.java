@@ -30,9 +30,11 @@ public class Function {
     public boolean call(String fc, sStack s) {
         s = parentProgram.runFunction(fc, s);
         if (s == null) return false;
+        
+        parentProgram.debug("Returning " + s + " to STACK[" + stack.hashCode() % 1000 + "]: " + stack);
         //System.out.println("Trying to add " + s);
         new sPush(s).run(this);
-        parentProgram.debug(name + " STACK: " + stack);
+        parentProgram.debug(name + "[" + this.hashCode() % 1000 + "] STACK[" + stack.hashCode() % 1000 + "]: " + stack);
         return true;
     }
     
@@ -44,18 +46,23 @@ public class Function {
         return params;
     }
     
+    public Function getCopy() {
+        return new Function(name, params, block);
+    }
+    
     public sStack run(Program parent, sStack start) {
+        stack = start;
         returnList = new sStack();
         hasReturned = false;
         
         parentProgram = parent;
         stack = start;
         
-        parentProgram.indent(4);
-        parentProgram.debug("Running [" + name + "]");
+        //parentProgram.indent(4);
+        parentProgram.debug("Running: " + name + "[" + this.hashCode() % 1000 + "] with STACK[" + stack.hashCode() % 1000 + "]");
         block.run(this);
         
-        parentProgram.indent(-4);
+        //parentProgram.indent(-4);
         return returnList;
     }
     

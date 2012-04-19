@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Program {
     private String name;
     private ArrayList<Function> functions;
     private int tabs = 0;
+    private String line = " ";
+    private HashMap<Integer, Argument> memory;
     
     public Program() {
         functions = new ArrayList<Function>();
@@ -18,6 +21,8 @@ public class Program {
         functions.add(new aCondition(">"));
         functions.add(new aCondition("<="));
         functions.add(new aCondition("<"));
+        
+        memory = new HashMap<Integer, Argument>();
     }
     
     public void add(Function f) {
@@ -45,12 +50,17 @@ public class Program {
         if (f.getParams() <= s.size()) {
             callWith = s.splitLast(f.getParams());
             s.popLast(f.getParams());
+            
+            // if f is a function, call a copy of that function. it prevents multiple pushing in recursive calls.
+            if (! (f instanceof aOperator || f instanceof aCondition)) {
+                f = f.getCopy();
+            }
+            
             ret = f.run(this, callWith);
         } else {
             debug(" -- can't yet, pushing to stack.");
         }
         
-        debug("Returning: " + ret);
         return ret;
     }
     
@@ -66,6 +76,17 @@ public class Program {
     }
     
     
+    public Argument getMemory(int index) {   
+        if (memory.containsKey(index)) {
+            return memory.get(index);
+        }
+        
+        return new aInteger(0);
+    }
+    
+    public void setMemory(int index, Argument arg) {
+        memory.put(index, arg);
+    }
     
     public void debug(String text) {
         System.out.println(tabs() + text);
@@ -78,7 +99,9 @@ public class Program {
     private String tabs() {
         String ret = "";
         
-        for (int i = 0; i < tabs; i++) ret += " ";
+        for (int i = 0; i < tabs; i++) {
+            if (i % 4 == 0) ret += line; else ret += " ";
+        }
         
         return ret;
     }
